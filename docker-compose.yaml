@@ -1,0 +1,8 @@
+name: simple-api
+
+services:
+  api:
+    build: ./
+    ports:
+      - "8081:8081"
+    image: ghcr.io/our-first-organization/simple-api-image:lastest
