@@ -2,7 +2,7 @@ pipeline{
     agent any
 
     environment{
-        APP_NAME = "Simple API"
+        APP_NAME = "My Simple API"
         IMAGE_NAME = "ghcr.io/our-first-organization/simple-api-image"
         VENV_NAME = 'myenv'
 		ROBOT_REPO = "https://github.com/our-first-organization/jenkin-simple-api-robot"
