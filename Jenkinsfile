@@ -3,7 +3,7 @@ pipeline{
 
     environment{
         APP_NAME = "My Simple API"
-        IMAGE_NAME = "ghcr.io/our-first-organization/simple-api-image"
+        IMAGE_NAME = "ghcr.io/our-first-organization/simple-api-image:lastest"
         VENV_NAME = 'myenv'
 		ROBOT_REPO = "https://github.com/our-first-organization/jenkin-simple-api-robot"
     }
@@ -91,7 +91,7 @@ pipeline{
 				withCredentials([string(credentialsId: "GITHUB_PAT", variable: "GITHUB_TOKEN")]) {
 					sh "echo ${GITHUB_TOKEN} | docker login ghcr.io -u USERNAME --password-stdin"
 					sh "docker push ${IMAGE_NAME}"
-					sh "docker rmi -f ${IMAGE_NAME}:latest"
+					sh "docker rmi -f ${IMAGE_NAME}"
 				}
 			}
 		}
