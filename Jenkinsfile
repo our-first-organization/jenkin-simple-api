@@ -117,6 +117,7 @@ pipeline{
 			}
 		}
 
+		// it has a shared workspace so docker-compose.yaml is available.
         stage("PreProd - Run Container from Image"){
             agent {
                 label "vm3"
