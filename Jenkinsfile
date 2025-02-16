@@ -83,24 +83,18 @@ pipeline{
             }
         }
 
-        stage("Push Docker Image") {
-            agent {
-                label "vm2"
-            }
-            steps {
-                withCredentials(
-                    [usernamePassword(
-                        credentialsId: "jenkin-simple-api",
-                        passwordVariable: "GITHUB_PASSWORD",
-                        usernameVariable: "GITHUB_USERNAME"
-                    )]
-                ){
-                    sh "docker login ghcr.io -u ${GITHUB_USERNAME} -p ${GITHUB_PASSWORD}"
-                    sh "docker push ${IMAGE_NAME}"
-                    sh "docker rmi -f ${IMAGE_NAME}:latest"
-                }
-            }
-        }
+		stage("Push Docker Image") {
+			agent {
+				label "vm2"
+			}
+			steps {
+				withCredentials([string(credentialsId: "GITHUB_PAT", variable: "GITHUB_TOKEN")]) {
+					sh "echo ${GITHUB_TOKEN} | docker login ghcr.io -u USERNAME --password-stdin"
+					sh "docker push ${IMAGE_NAME}"
+					sh "docker rmi -f ${IMAGE_NAME}:latest"
+				}
+			}
+		}
 
         stage("Stop Docker Container"){
             agent {
@@ -111,23 +105,17 @@ pipeline{
             }
         }
 
-        stage("PreProd - Pull Image"){
-            agent {
-                label "vm3"
-            }
-            steps {
-                withCredentials(
-                    [usernamePassword(
-                        credentialsId: "jenkin-simple-api",
-                        passwordVariable: "GITHUB_PASSWORD",
-                        usernameVariable: "GITHUB_USERNAME"
-                    )]
-                ){
-                    sh "docker login ghcr.io -u ${GITHUB_USERNAME} -p ${GITHUB_PASSWORD}"
-                    sh "docker pull ${IMAGE_NAME}"
-                }
-            }
-        }
+		stage("PreProd - Pull Image") {
+			agent {
+				label "vm3"
+			}
+			steps {
+				withCredentials([string(credentialsId: "GITHUB_PAT", variable: "GITHUB_TOKEN")]) {
+					sh "echo ${GITHUB_TOKEN} | docker login ghcr.io -u USERNAME --password-stdin"
+					sh "docker pull ${IMAGE_NAME}"
+				}
+			}
+		}
 
         stage("PreProd - Run Container from Image"){
             agent {
