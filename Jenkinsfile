@@ -130,8 +130,10 @@ pipeline{
 
     post {
         always {
-            // Clean up the virtual environment
-            sh "rm -rf ${VENV_NAME}"
+            node('vm2') {
+                // Clean up the virtual environment
+                sh "rm -rf ${VENV_NAME}"
+            }
         }
     }
 }
